@@ -8,7 +8,9 @@ export class TodoEntity extends BaseEntity {
     @Column()
     text: string
 
-    @Column()
+    @Column({
+        default: false
+    })
     complete: boolean
 
     @Column()

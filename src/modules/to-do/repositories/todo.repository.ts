@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Between, ILike, Repository } from "typeorm";
+import { Between, ILike, Repository, Entity } from 'typeorm';
 import { TodoEntity } from "../entities/todo.entity";
 
 @Injectable()
@@ -22,7 +22,7 @@ export class todoRepository extends Repository<TodoEntity>{
         difficult?: number,
         completed?: boolean,
         search?: string
-    }): Promise<TodoItem[]>{
+    }): Promise<TodoEntity[]>{
         const where = {}
         if (params.createdAt){
             const startOfDay = new Date(params.createdAt)
@@ -58,5 +58,11 @@ export class todoRepository extends Repository<TodoEntity>{
             }
         })
         return entities;
+    }
+
+    async registerItem(input: Partial<TodoEntity>): Promise<TodoEntity>{
+        const entity = this.create(input)
+        await this.save(entity)
+        return entity
     }
 }
