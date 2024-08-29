@@ -1,16 +1,21 @@
 import { Injectable } from "@nestjs/common";
-import { Between, ILike, Repository, Entity } from 'typeorm';
+import { InjectRepository } from "@nestjs/typeorm";
+import { Between, ILike, Repository } from "typeorm";
 import { TodoEntity } from "../entities/todo.entity";
 
 @Injectable()
-export class todoRepository extends Repository<TodoEntity>{
+export class TodoRepository extends Repository<TodoEntity> {
+    constructor(@InjectRepository(TodoEntity) repository: Repository<TodoEntity>) {
+        super(repository.target, repository.manager)
+    }
+
     async getOneById(id: string): Promise<TodoEntity> {
         const entity = await this.findOneBy({
-            id // mesma coisa que id: id
+            id
         })
 
-        if (!entity)
-            throw new Error("Item with inputed id not founded");
+        if (!entity) 
+            throw new Error("Item com esse id não existe no banco de dados")
 
         return entity
     }
@@ -19,17 +24,18 @@ export class todoRepository extends Repository<TodoEntity>{
         page: number,
         perPage: number,
         createdAt?: Date,
-        difficult?: number,
+        dificult?: number,
         completed?: boolean,
-        search?: string
-    }): Promise<TodoEntity[]>{
+        search?: string 
+    }): Promise<Array<TodoEntity>> {
         const where = {}
-        if (params.createdAt){
+        if (params.createdAt) {
             const startOfDay = new Date(params.createdAt)
             startOfDay.setHours(0)
             startOfDay.setMinutes(0)
             startOfDay.setSeconds(0)
             startOfDay.setMilliseconds(0)
+
             const endOfDay = new Date(params.createdAt)
             endOfDay.setHours(23)
             endOfDay.setMinutes(59)
@@ -37,14 +43,14 @@ export class todoRepository extends Repository<TodoEntity>{
             endOfDay.setMilliseconds(999)
             where['createdAt'] = Between(startOfDay, endOfDay)
         }
-        if (params.difficult){
-            where['difficult'] = params.difficult
+        if (params.dificult) {
+            where["dificult"] = params.dificult
         }
-        if (params.completed){
-            where['completed'] = params.completed
+        if (params.completed) {
+            where["completed"] = params.completed
         }
-        if (params.search){
-            where['text'] = ILike(`%${params.search}%`)
+        if (params.search) {
+            where["text"] = ILike(`%${params.search}%`)
         }
 
         const skip = (params.page - 1) * params.perPage
@@ -53,14 +59,15 @@ export class todoRepository extends Repository<TodoEntity>{
             where,
             skip,
             order: {
-                complete: 'ASC',
-                createdAt: 'DESC'
+                complete: "ASC",
+                createdAt: "DESC"
             }
         })
-        return entities;
+
+        return entities
     }
 
-    async registerItem(input: Partial<TodoEntity>): Promise<TodoEntity>{
+    async registerItem(input: Partial<TodoEntity>): Promise<TodoEntity> {
         const entity = this.create(input)
         await this.save(entity)
         return entity

@@ -1,22 +1,22 @@
 import { Injectable } from "@nestjs/common";
-import { todoRepository } from './repositories/todo.repository';
+import { TodoRepository } from "./repositories/todo.repository";
 import { TodoEntity } from "./entities/todo.entity";
 
 @Injectable()
-export class TodoService{
-    constructor(private readonly todoRepository: todoRepository){}
-        
-    async createNewTodoItem(text: string, difficult: number): Promise<TodoEntity>{
+export class TodoService {
+    constructor(private readonly todoRepository: TodoRepository) {}
+
+    async createNewTodoItem(text: string, dificult: number): Promise<TodoEntity> {
         const data = {
             text
         }
-        if (difficult < 0) data["difficult"] = 0
-        else if (difficult <= 25) data["difficult"] = 25
-        else if (difficult <= 50) data["difficult"] = 50
-        else if (difficult <= 75) data["difficult"] = 75
-        else data["difficult"] = 100
+        if (dificult <= 0) data["dificult"] = 0
+        else if (dificult <= 25) data["dificult"] = 25
+        else if (dificult <= 50) data["dificult"] = 50
+        else if (dificult <= 75) data["dificult"] = 75
+        else data["dificult"] = 100
 
         const entity = await this.todoRepository.registerItem(data);
-        return entity;
+        return entity
     }
 }

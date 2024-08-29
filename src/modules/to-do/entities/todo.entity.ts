@@ -2,7 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, Primary
 
 @Entity()
 export class TodoEntity extends BaseEntity {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn('uuid')
     id: string
 
     @Column()
@@ -14,7 +14,7 @@ export class TodoEntity extends BaseEntity {
     complete: boolean
 
     @Column()
-    difficult: number
+    dificult: number
 
     @CreateDateColumn()
     createdAt: Date
@@ -23,5 +23,5 @@ export class TodoEntity extends BaseEntity {
     updatedAt: Date
 
     @DeleteDateColumn()
-    deletedAt: Date | null
+    deletedAt: Date | null 
 }
