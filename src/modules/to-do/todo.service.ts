@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { todoRepository } from './repositories/todo.repository';
+import { TodoEntity } from "./entities/todo.entity";
 
 @Injectable()
 export class TodoService{
     constructor(private readonly todoRepository: todoRepository){}
         
-    async createNewTodoItem(text: string, difficult: number){
+    async createNewTodoItem(text: string, difficult: number): Promise<TodoEntity>{
         const data = {
             text
         }
@@ -16,5 +17,6 @@ export class TodoService{
         else data["difficult"] = 100
 
         const entity = await this.todoRepository.registerItem(data);
+        return entity;
     }
 }
