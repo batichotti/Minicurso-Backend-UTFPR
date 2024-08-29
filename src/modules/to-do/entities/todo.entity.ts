@@ -15,10 +15,10 @@ export class TodoEntity extends BaseEntity {
     difficult: number
 
     @CreateDateColumn()
-    createdAr: Date
+    createdAt: Date
 
     @UpdateDateColumn()
-    updatedAr: Date
+    updatedAt: Date
 
     @DeleteDateColumn()
     deletedAt: Date | null

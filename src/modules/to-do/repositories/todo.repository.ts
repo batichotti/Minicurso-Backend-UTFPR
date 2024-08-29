@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ILike, Repository } from "typeorm";
+import { Between, ILike, Repository } from "typeorm";
 import { TodoEntity } from "../entities/todo.entity";
 
 @Injectable()
@@ -25,7 +25,17 @@ export class todoRepository extends Repository<TodoEntity>{
     }): Promise<TodoItem[]>{
         const where = {}
         if (params.createdAt){
-            where['createdAt'] = params.createdAt
+            const startOfDay = new Date(params.createdAt)
+            startOfDay.setHours(0)
+            startOfDay.setMinutes(0)
+            startOfDay.setSeconds(0)
+            startOfDay.setMilliseconds(0)
+            const endOfDay = new Date(params.createdAt)
+            endOfDay.setHours(23)
+            endOfDay.setMinutes(59)
+            endOfDay.setSeconds(59)
+            endOfDay.setMilliseconds(999)
+            where['createdAt'] = Between(startOfDay, endOfDay)
         }
         if (params.difficult){
             where['difficult'] = params.difficult
@@ -37,8 +47,16 @@ export class todoRepository extends Repository<TodoEntity>{
             where['text'] = ILike(`%${params.search}%`)
         }
 
+        const skip = (params.page - 1) * params.perPage
+
         const entities = await this.find({
-            
+            where,
+            skip,
+            order: {
+                complete: 'ASC',
+                createdAt: 'DESC'
+            }
         })
+        return entities;
     }
 }
