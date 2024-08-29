@@ -1,4 +1,4 @@
-import { Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { TodoService } from './todo.service';
 import { TodoEntity } from "./entities/todo.entity";
 
