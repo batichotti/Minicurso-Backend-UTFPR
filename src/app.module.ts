@@ -17,7 +17,7 @@ import { TodoModule } from './modules/to-do/todo.module';
     autoLoadEntities: true,
     uuidExtension: 'pgcrypto',
     namingStrategy: new SnakeNamingStrategy(),
-  })],
+  }), TodoModule],
   controllers: [AppController],
   providers: [AppService],
 })
