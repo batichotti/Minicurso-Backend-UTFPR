@@ -24,7 +24,7 @@ export class TodoRepository extends Repository<TodoEntity> {
         page: number,
         perPage: number,
         createdAt?: Date,
-        dificult?: number,
+        difficult?: number,
         completed?: boolean,
         search?: string 
     }): Promise<Array<TodoEntity>> {
@@ -43,8 +43,8 @@ export class TodoRepository extends Repository<TodoEntity> {
             endOfDay.setMilliseconds(999)
             where['createdAt'] = Between(startOfDay, endOfDay)
         }
-        if (params.dificult) {
-            where["dificult"] = params.dificult
+        if (params.difficult) {
+            where["difficult"] = params.difficult
         }
         if (params.completed) {
             where["completed"] = params.completed

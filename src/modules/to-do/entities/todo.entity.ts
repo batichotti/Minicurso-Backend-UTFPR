@@ -14,7 +14,7 @@ export class TodoEntity extends BaseEntity {
     complete: boolean
 
     @Column()
-    dificult: number
+    difficult: number
 
     @CreateDateColumn()
     createdAt: Date

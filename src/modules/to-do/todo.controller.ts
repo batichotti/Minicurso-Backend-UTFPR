@@ -8,6 +8,6 @@ export class TodoController {
 
     @Post('create')
     async create(@Body() body: any): Promise<TodoEntity> {
-        return await this.todoService.createNewTodoItem(body.text, body.dificult)
+        return await this.todoService.createNewTodoItem(body.text, body.difficult)
     }
 }
